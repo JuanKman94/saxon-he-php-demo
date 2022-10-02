@@ -1,11 +1,18 @@
 <?php
 
+print "Validating article using DTD with libxml2 …\n";
+putenv('XML_CATALOG_FILES=' . __DIR__ . '/catalog.xml'); // comment this out to disable the catalog
+putenv('XML_DEBUG_CATALOG=');
+libxml_use_internal_errors(true);
+$doc = new \DOMDocument;
+// validate against the DTD
+$doc->load(__DIR__ . '/example.xml', LIBXML_DTDLOAD | LIBXML_DTDVALID | LIBXML_NONET);
+print_r(libxml_get_errors());
+
+print "Validating article using Schematron with Saxon …\n";
 $saxonProcessor = new Saxon\SaxonProcessor();
-//$saxonProcessor->setConfigurationProperty('http://saxon.sf.net/feature/sourceParserClass', 'org.apache.xml.resolver.tools.ResolvingXMLReader');
-$saxonProcessor->setCatalog(__DIR__ . '/catalog.xml', true); // this fails
+$saxonProcessor->setCatalog(__DIR__ . '/catalog.xml', true); // true = tracing
 $processor = $saxonProcessor->newXslt30Processor();
 $executable = $processor->compileFromFile(__DIR__ . '/example.xsl');
-//$result = $executable->transformFileToFile('example.xml', 'output.xml');
-$result = $executable->transformFileToString('example.xml');
-echo $result;
-
+$result = $executable->transformFileToString(__DIR__ . '/example.xml');
+print $result;

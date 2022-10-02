@@ -12,7 +12,7 @@ RUN mkdir -p /usr/share/man/man1
 RUN apt-get update
 RUN apt-get install -y --no-install-recommends ${jdk} unzip libxml-commons-resolver1.1-java
 
-ARG version='11.3'
+ARG version='11.4'
 
 ## fetch
 RUN curl https://www.saxonica.com/download/libsaxon-HEC-setup64-v${version}.zip --output /tmp/saxon.zip
@@ -35,6 +35,6 @@ RUN make install
 RUN echo 'extension=saxon.so' > "$PHP_INI_DIR/conf.d/20-saxon.ini"
 RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
 
-WORKDIR /opt
+WORKDIR /code
 CMD ["php", "example.php"]
 
