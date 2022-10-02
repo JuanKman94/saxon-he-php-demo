@@ -8,7 +8,7 @@ $doc = new \DOMDocument;
 $doc->load(__DIR__ . '/example.xml', LIBXML_DTDLOAD | LIBXML_DTDVALID | LIBXML_NONET);
 print_r(libxml_get_errors());
 
-print "Validating article using Schematron with Saxon …\n";
+print "Transforming article with Saxon …\n";
 $saxonProcessor = new Saxon\SaxonProcessor();
 $saxonProcessor->setCatalog(__DIR__ . '/catalog.xml', true); // true = tracing
 $processor = $saxonProcessor->newXslt30Processor();
