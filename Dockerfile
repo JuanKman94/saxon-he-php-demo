@@ -1,19 +1,11 @@
 # According to Saxonica's website, they tested with 8.1.11
 # https://www.saxonica.com/saxon-c/documentation12/index.html#!starting/installingphp
-FROM --platform=linux/amd64 php:8.1.11-cli-bullseye
+FROM --platform=linux/amd64 fedora:37
 
-ARG DEBIAN_FRONTEND=noninteractive
-
-ARG jdk='openjdk-11-jdk-headless'
-ARG jvm='/usr/lib/jvm/java-11-openjdk-amd64'
 ARG SAXON_VER='12.0'
 
-# needed for openjdk-11-jdk-headless
-RUN mkdir -p /usr/share/man/man1
-
 ## dependencies
-RUN apt-get update
-RUN apt-get install -y --no-install-recommends ${jdk} unzip libxml-commons-resolver1.1-java
+RUN dnf install -y php-cli php-devel unzip xml-commons-resolver xml-commons-apis
 
 ## fetch
 RUN curl https://www.saxonica.com/download/libsaxon-HEC-linux-v${SAXON_VER}.zip --output /tmp/saxon.zip
@@ -32,8 +24,7 @@ RUN ./configure --enable-saxon
 RUN sed -i 's|setRelocate|setRelocatable|g' php8_*.c*
 RUN make
 RUN make install
-RUN echo 'extension=saxon' > "$PHP_INI_DIR/conf.d/20-saxon.ini"
-RUN mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+RUN echo 'extension=saxon' > /etc/php.d/20-saxon.ini
 
 WORKDIR /code
 CMD ["php", "example.php"]
