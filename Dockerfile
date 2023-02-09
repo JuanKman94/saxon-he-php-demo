@@ -14,7 +14,7 @@ RUN rm /tmp/saxon.zip
 
 ## install
 WORKDIR /opt/saxon/libsaxon-HEC-linux-v${SAXON_VER}
-RUN cp libs/nix/libsaxon-hec-${SAXON_VER}.so /usr/lib/
+RUN cp libs/nix/libsaxon-hec-${SAXON_VER}.so /lib64
 
 ## build
 WORKDIR /opt/saxon/libsaxon-HEC-linux-v${SAXON_VER}/Saxon.C.API
