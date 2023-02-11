@@ -22,6 +22,7 @@ RUN phpize
 RUN ./configure --enable-saxon
 # TODO: submit issue to Saxonica tracker: https://saxonica.plan.io/issues
 RUN sed -i 's|setRelocate|setRelocatable|g' php8_*.c*
+RUN sed -i 's|return xsltApplyStylesheet(environi->thread, proc, cwd, source, stylesheet);|return 0;|g' SaxonCProcessor.c
 RUN make
 RUN make install
 RUN echo 'extension=saxon' > /etc/php.d/20-saxon.ini
